@@ -94,6 +94,14 @@
  */
 @property (nonatomic, assign) BOOL clipBoundsToEditingInsets;
 
+/**
+ *  Controls whether the return key dismisses the keyboard or not. If `NO`, the text
+ *  field supports adding newline characters.
+ *
+ *  @note Set `returnKeyEndsEditing` in JotViewController to control this property.
+ */
+@property (nonatomic, assign) BOOL returnKeyEndsEditing;
+
 @end
 
 

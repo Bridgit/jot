@@ -211,6 +211,14 @@
     }
 }
 
+- (void)setReturnKeyEndsEditing:(BOOL)returnKeyEndsEditing
+{
+    if (_returnKeyEndsEditing != returnKeyEndsEditing) {
+        _returnKeyEndsEditing = returnKeyEndsEditing;
+        self.textEditView.returnKeyEndsEditing = returnKeyEndsEditing;
+    }
+}
+
 - (void)setClipBoundsToEditingInsets:(BOOL)clipBoundsToEditingInsets
 {
     if (_clipBoundsToEditingInsets != clipBoundsToEditingInsets) {

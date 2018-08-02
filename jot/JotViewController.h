@@ -157,6 +157,12 @@ typedef NS_ENUM(NSUInteger, JotViewState){
  */
 @property (nonatomic, assign) BOOL clipBoundsToEditingInsets;
 
+/**
+ *  Controls whether the return key dismisses the keyboard or not. If `NO`, the text
+ *  field supports adding newline characters.
+ */
+@property (nonatomic, assign) BOOL returnKeyEndsEditing;
+
 
 @property (nonatomic, strong, readonly) JotDrawingContainer *drawingContainer;
 
