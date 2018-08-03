@@ -8,6 +8,7 @@
 
 #import "JotTextEditView.h"
 #import <Masonry/Masonry.h>
+#import "JotDoneAccessoryView.h"
 
 @interface JotTextEditView () <UITextViewDelegate>
 
@@ -44,13 +45,17 @@
         self.textView.backgroundColor = [UIColor clearColor];
         self.textView.text = self.textString;
         self.textView.keyboardType = UIKeyboardTypeDefault;
-        self.textView.returnKeyType = UIReturnKeyDone;
+        self.textView.keyboardAppearance = UIKeyboardAppearanceDark;
+        self.textView.returnKeyType = self.returnKeyEndsEditing ? UIReturnKeyDone : UIReturnKeyDefault;
         self.textView.clipsToBounds = NO;
         self.textView.delegate = self;
         [self.textContainer addSubview:self.textView];
         [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self.textContainer).insets(_textEditingInsets);
         }];
+
+        JotDoneAccessoryView *accessoryView = [[JotDoneAccessoryView alloc] init];
+        accessoryView.textView = self.textView;
         
         self.textContainer.hidden = YES;
         self.userInteractionEnabled = NO;
@@ -226,19 +231,21 @@
 
 #pragma mark - Text Editing
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+- (void)textViewDidEndEditing:(UITextView *)textView
 {
-    if ([text isEqualToString: @"\n"]) {
-        self.isEditing = NO;
-        return NO;
-    }
-    
-    if (textView.text.length + (text.length - range.length) > 70) {
-        return NO;
-    }
-    
-    if ([text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]].location != NSNotFound) {
-        return NO;
+    self.isEditing = NO;
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if (self.returnKeyEndsEditing) {
+        if ([text isEqualToString: @"\n"] ||
+            (textView.text.length + (text.length - range.length) > 70) ||
+            [text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]].location != NSNotFound) {
+
+            [textView resignFirstResponder];
+            return NO;
+        }
     }
     
     return YES;
